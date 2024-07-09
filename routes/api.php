@@ -4,6 +4,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\userController;
 use App\Http\Controllers\PrestataireController;
+use App\Http\Controllers\ActiviteController;
+use App\Http\Controllers\ImageUploadController;
+use App\Http\Controllers\GalerieController;
 use Illuminate\Support\Facades\Crypt;
 
 /*
@@ -45,3 +48,11 @@ Route::prefix('/prestataire')->group(function () {
     Route::post('/create', [PrestataireController::class, 'create']);
     Route::post('/select', [PrestataireController::class, 'select']);
 });
+
+Route::prefix('/activity')->group(function () {
+    Route::post('/create', [ActiviteController::class, 'create']);
+    Route::post('/select', [ActiviteController::class, 'select']);
+});
+
+Route::post('/upload-image', [ImageUploadController::class, 'upload']);
+Route::post('/galery', [GalerieController::class, 'create']);

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Activite;
 use Illuminate\Http\Request;
+use App\Http\Controllers\GalerieController;
+use Illuminate\Support\Facades\Crypt;
 
 class ActiviteController extends Controller
 {
@@ -22,9 +24,61 @@ class ActiviteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
+    {
+        try {
+        //
+            $activity = new Activite();
+            $activity -> titre = $request -> titre;
+            $activity -> lieu = $request -> lieu;
+            $activity -> datedebut = $request -> datedebut;
+            $activity -> datefin = $request -> datefin;
+            $activity -> NombreParticipant = $request -> NombreParticipant;
+            $activity -> prix = $request -> prix;
+            $activity -> prixParPersonne = $request -> prixParPersonne;
+            $activity -> description = $request -> description;
+
+            $authorization = $request -> authorization;
+            $tokenDecoded = Crypt::decrypt($authorization);
+            $tokenExploded = explode("<>", $tokenDecoded);
+
+            $activity -> idPrestataire = intval($tokenExploded[0]);
+
+            $activity -> save();
+
+            $id = $activity->id;
+
+            $image_saveds_id = [];
+
+            if($request -> images) {
+                foreach ($request -> images as $image) {
+                    $imageSaved = GalerieController::create($image, $id);
+                    array_push($image_saveds_id, $imageSaved);
+                }
+            }
+    
+
+            $res = [
+                'status' => true,
+                'msg' => 'Activity created successfully',
+                'id' => $id,
+                'activity' => $activity,
+                'galery' => $image_saveds_id,
+            ];
+            
+            return response()->json($res);
+
+        } catch (\Exception $e) {
+            //throw $th;
+            return response()->json(['error' => 'Error creating activity', 'details' => $e->getMessage()], 500);
+        }
+
+    }
+
+    public function select()
     {
         //
+        return Activite::all();
     }
 
     /**

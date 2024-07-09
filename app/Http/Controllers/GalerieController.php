@@ -22,9 +22,26 @@ class GalerieController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public static function create($nom, $id_activity)
     {
-        //
+
+        try {
+            //
+            $image = new Galerie();
+            $image -> NomImage = $nom;
+            $image -> IdActivite = $id_activity;
+
+            $image -> save();
+
+            $image_id = $image -> id;
+            
+            return $image_id;
+    
+        } catch (\Exception $e) {
+            //throw $th;
+            return response()->json(['error' => 'Error saving name image', 'details' => $e->getMessage()], 500);
+        }
+
     }
 
     /**

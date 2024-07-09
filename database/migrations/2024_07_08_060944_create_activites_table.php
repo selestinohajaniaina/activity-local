@@ -15,11 +15,15 @@ return new class extends Migration
     {
         Schema::create('activites', function (Blueprint $table) {
             $table->id();
+            $table->string('titre');
             $table->string('lieu');
+            $table->text('datedebut');
+            $table->text('datefin');
+            $table->integer('NombreParticipant');
+            $table->integer('prix');
+            $table->integer('prixParPersonne');
             $table->text('description');
             $table->integer('idPrestataire');
-            $table->integer('prix');
-            $table->integer('NombreParticipant');
             $table->timestamps();
         });
     }
