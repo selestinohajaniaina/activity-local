@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\userController;
 use App\Http\Controllers\PrestataireController;
 use App\Http\Controllers\ActiviteController;
+use App\Http\Controllers\AvisController;
+use App\Http\Controllers\ActiviteNoteController;
 use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\GalerieController;
 use Illuminate\Support\Facades\Crypt;
@@ -44,6 +46,7 @@ Route::prefix('/user')->group(function () {
     Route::post('/select', [userController::class, 'select']);
 });
 
+
 Route::prefix('/prestataire')->group(function () {
     Route::post('/create', [PrestataireController::class, 'create']);
     Route::post('/select', [PrestataireController::class, 'select']);
@@ -52,6 +55,16 @@ Route::prefix('/prestataire')->group(function () {
 Route::prefix('/activity')->group(function () {
     Route::post('/create', [ActiviteController::class, 'create']);
     Route::post('/select', [ActiviteController::class, 'select']);
+});
+
+Route::prefix('/avis')->group(function () {
+    Route::post('/create', [AvisController::class, 'create']);
+    Route::post('/select', [AvisController::class, 'select']);
+});
+
+Route::prefix('/avisnote')->group(function () {
+    Route::post('/create', [ActiviteNoteController::class, 'create']);
+    Route::post('/select', [ActiviteNoteController::class, 'select']);
 });
 
 Route::post('/upload-image', [ImageUploadController::class, 'upload']);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ActiviteNote;
+use App\Models\AvisNote;
 use Illuminate\Http\Request;
 
 class ActiviteNoteController extends Controller
@@ -22,9 +23,24 @@ class ActiviteNoteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        try {
+            $avnote = new AvisNote ();
+
+            $avnote -> IdUser = $request -> CleUser ;
+            $avnote -> IdAvis = $request -> CleAvis ;
+            $avnote -> NombreNote = $request -> NbNote ;
+
+            $avnote -> save();
+
+            $res = [
+              'msg' => 'avis created successfully',
+            ];
+
+      } catch (\Throwable $th) {
+          return response()->json(['error' => 'Error creating prestataire', 'details' => $th->getMessage()], 500);
+      }
     }
 
     /**
@@ -33,10 +49,28 @@ class ActiviteNoteController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function select(Request $request)
     {
-        //
+        $avis = AvisNote::where('id', '=', $request -> id)
+        ->first(['id', 'IdUser', 'IdAvis', '', 'NombreNote']);
+
+if(!$avis) {
+return response()->json(['status' => false, 'msg' => 'Compte introuvable']);
+}
+
+
+
+$res = [
+'status' => true,
+'CleUser' => $avis -> IdUser,
+'CleActivite' => $avis -> IdActivite,
+'NbNote' => $avis -> NombreNote,
+
+];
+
+return response()->json($res);
     }
+
 
     /**
      * Display the specified resource.

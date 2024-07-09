@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Avis;
 use Illuminate\Http\Request;
+use PhpParser\Node\Stmt\TryCatch;
 
 class AvisController extends Controller
 {
@@ -22,9 +23,24 @@ class AvisController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        try {
+              $avis = new Avis();
+
+              $avis -> IdUser = $request -> CleUser ;
+              $avis -> IdActivite = $request -> CleActivite ;
+              $avis -> description = $request -> contenu ;
+
+              $avis -> save();
+
+              $res = [
+                'msg' => 'avis created successfully',
+              ];
+
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 'Error creating prestataire', 'details' => $th->getMessage()], 500);
+        }
     }
 
     /**
@@ -33,9 +49,26 @@ class AvisController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function select(Request $request)
     {
-        //
+        $avis = Avis::where('id', '=', $request -> id)
+        ->first(['id', 'IdUser', 'IdActivite', '', 'description']);
+
+if(!$avis) {
+return response()->json(['status' => false, 'msg' => 'Compte introuvable']);
+}
+
+
+
+$res = [
+'status' => true,
+'CleUser' => $avis -> IdUser,
+'CleActivite' => $avis -> IdActivite,
+'contenu' => $avis -> description,
+
+];
+
+return response()->json($res);
     }
 
     /**

@@ -12,7 +12,7 @@ class PrestataireController extends Controller
     //
     public function create(Request $request)
     {
-        try {
+        try { 
             
             $prestataire = new Prestataire();
     
