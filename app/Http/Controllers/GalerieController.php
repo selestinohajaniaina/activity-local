@@ -47,12 +47,11 @@ class GalerieController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function get_one($id_activity)
     {
         //
+        return Galerie::inRandomOrder() -> where('IdActivite', $id_activity) -> first();
     }
 
     /**

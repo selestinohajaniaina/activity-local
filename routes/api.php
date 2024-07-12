@@ -50,11 +50,16 @@ Route::prefix('/user')->group(function () {
 Route::prefix('/prestataire')->group(function () {
     Route::post('/create', [PrestataireController::class, 'create']);
     Route::post('/select', [PrestataireController::class, 'select']);
+    Route::get('/profil/{id}', [PrestataireController::class, 'find']);
 });
 
 Route::prefix('/activity')->group(function () {
     Route::post('/create', [ActiviteController::class, 'create']);
-    Route::post('/select', [ActiviteController::class, 'select']);
+    Route::get('/select', [ActiviteController::class, 'select']);
+    Route::get('/random', [ActiviteController::class, 'random']);
+    Route::get('/random-2', [ActiviteController::class, 'random']);
+    Route::get('/profil/1/random', [ActiviteController::class, 'profil_random']);
+    Route::get('/profil/{id}', [ActiviteController::class, 'profil']);
 });
 
 Route::prefix('/avis')->group(function () {
@@ -69,3 +74,4 @@ Route::prefix('/avisnote')->group(function () {
 
 Route::post('/upload-image', [ImageUploadController::class, 'upload']);
 Route::post('/galery', [GalerieController::class, 'create']);
+Route::get('/galery/{id_activity}', [GalerieController::class, 'get_one']);

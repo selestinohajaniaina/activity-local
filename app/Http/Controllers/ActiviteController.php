@@ -14,9 +14,16 @@ class ActiviteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function profil($id)
     {
         //
+        return Activite::where('id', $id) -> first();
+    }
+
+    public function profil_random()
+    {
+        //
+        return Activite::inRandomOrder() -> first();
     }
 
     /**
@@ -79,6 +86,12 @@ class ActiviteController extends Controller
     {
         //
         return Activite::all();
+    }
+
+    public function random()
+    {
+        //
+        return Activite::inRandomOrder() -> limit(10) -> get();
     }
 
     /**
