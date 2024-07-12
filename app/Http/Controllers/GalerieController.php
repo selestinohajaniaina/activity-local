@@ -54,6 +54,12 @@ class GalerieController extends Controller
         return Galerie::inRandomOrder() -> where('IdActivite', $id_activity) -> first();
     }
 
+    public function get_all($id_activity)
+    {
+        //
+        return Galerie::where('IdActivite', $id_activity) -> get();
+    }
+
     /**
      * Display the specified resource.
      *

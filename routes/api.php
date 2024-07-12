@@ -73,5 +73,8 @@ Route::prefix('/avisnote')->group(function () {
 });
 
 Route::post('/upload-image', [ImageUploadController::class, 'upload']);
-Route::post('/galery', [GalerieController::class, 'create']);
-Route::get('/galery/{id_activity}', [GalerieController::class, 'get_one']);
+Route::prefix('/galery')->group(function () {
+    Route::post('/', [GalerieController::class, 'create']);
+    Route::get('/{id_activity}', [GalerieController::class, 'get_one']);
+    Route::get('/photos/{id_activity}', [GalerieController::class, 'get_all']);
+});
