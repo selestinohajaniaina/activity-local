@@ -22,9 +22,26 @@ class AvisNoteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        {
+            try {
+                $avnote = new AvisNote ();
+    
+                $avnote -> IdUser = $request -> CleUser ;
+                $avnote -> IdAvis = $request -> CleAvis ;
+                $avnote -> NombreNote = $request -> NbNote ;
+    
+                $avnote -> save();
+    
+                $res = [
+                  'msg' => 'avis created successfully',
+                ];
+    
+          } catch (\Throwable $th) {
+              return response()->json(['error' => 'Error ', 'details' => $th->getMessage()], 500);
+          }
+        }
     }
 
     /**
