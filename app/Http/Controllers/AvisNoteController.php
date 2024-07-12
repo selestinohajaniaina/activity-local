@@ -22,9 +22,26 @@ class AvisNoteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        {
+            try {
+                $avnote = new AvisNote ();
+    
+                $avnote -> IdUser = $request -> CleUser ;
+                $avnote -> IdAvis = $request -> CleAvis ;
+                $avnote -> NombreNote = $request -> NbNote ;
+    
+                $avnote -> save();
+    
+                $res = [
+                  'msg' => 'avis created successfully',
+                ];
+    
+          } catch (\Throwable $th) {
+              return response()->json(['error' => 'Error ', 'details' => $th->getMessage()], 500);
+          }
+        }
     }
 
     /**
@@ -44,9 +61,26 @@ class AvisNoteController extends Controller
      * @param  \App\Models\AvisNote  $avisNote
      * @return \Illuminate\Http\Response
      */
-    public function show(AvisNote $avisNote)
+    public function select(Request $request)
     {
-        //
+        $avis = AvisNote::where('id', '=', $request -> id)
+        ->first(['id', 'IdUser', 'IdAvis', '', 'NombreNote']);
+
+if(!$avis) {
+return response()->json(['status' => false, 'msg' => 'Compte introuvable']);
+}
+
+
+
+$res = [
+'status' => true,
+'CleUser' => $avis -> IdUser,
+'CleAvis' => $avis -> IdAvis,
+'NbNote' => $avis -> NombreNote,
+
+];
+
+return response()->json($res);
     }
 
     /**

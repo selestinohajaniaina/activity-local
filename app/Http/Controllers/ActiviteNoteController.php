@@ -26,20 +26,20 @@ class ActiviteNoteController extends Controller
     public function create(Request $request)
     {
         try {
-            $avnote = new AvisNote ();
+            $activnote = new ActiviteNote ();
 
-            $avnote -> IdUser = $request -> CleUser ;
-            $avnote -> IdAvis = $request -> CleAvis ;
-            $avnote -> NombreNote = $request -> NbNote ;
+            $activnote -> IdUser = $request -> CleUser ;
+            $activnote -> IdActivite = $request -> CleActivite ;
+            $activnote -> NombreNote = $request -> NbNote ;
 
-            $avnote -> save();
+            $activnote -> save();
 
             $res = [
               'msg' => 'avis created successfully',
             ];
 
       } catch (\Throwable $th) {
-          return response()->json(['error' => 'Error creating prestataire', 'details' => $th->getMessage()], 500);
+          return response()->json(['error' => 'Error ', 'details' => $th->getMessage()], 500);
       }
     }
 
@@ -52,7 +52,7 @@ class ActiviteNoteController extends Controller
     public function select(Request $request)
     {
         $avis = AvisNote::where('id', '=', $request -> id)
-        ->first(['id', 'IdUser', 'IdAvis', '', 'NombreNote']);
+        ->first(['id', 'IdUser', 'IdActivite', '', 'NombreNote']);
 
 if(!$avis) {
 return response()->json(['status' => false, 'msg' => 'Compte introuvable']);
