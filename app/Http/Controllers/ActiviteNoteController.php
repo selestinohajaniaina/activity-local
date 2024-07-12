@@ -52,7 +52,7 @@ class ActiviteNoteController extends Controller
     public function select(Request $request)
     {
         $avis = AvisNote::where('id', '=', $request -> id)
-        ->first(['id', 'IdUser', 'IdAvis', '', 'NombreNote']);
+        ->first(['id', 'IdUser', 'IdActivite', '', 'NombreNote']);
 
 if(!$avis) {
 return response()->json(['status' => false, 'msg' => 'Compte introuvable']);

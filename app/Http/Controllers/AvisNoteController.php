@@ -61,9 +61,26 @@ class AvisNoteController extends Controller
      * @param  \App\Models\AvisNote  $avisNote
      * @return \Illuminate\Http\Response
      */
-    public function show(AvisNote $avisNote)
+    public function select(Request $request)
     {
-        //
+        $avis = AvisNote::where('id', '=', $request -> id)
+        ->first(['id', 'IdUser', 'IdAvis', '', 'NombreNote']);
+
+if(!$avis) {
+return response()->json(['status' => false, 'msg' => 'Compte introuvable']);
+}
+
+
+
+$res = [
+'status' => true,
+'CleUser' => $avis -> IdUser,
+'CleAvis' => $avis -> IdAvis,
+'NbNote' => $avis -> NombreNote,
+
+];
+
+return response()->json($res);
     }
 
     /**
