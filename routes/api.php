@@ -60,6 +60,13 @@ Route::prefix('/activity')->group(function () {
     Route::get('/random-2', [ActiviteController::class, 'random']);
     Route::get('/profil/1/random', [ActiviteController::class, 'profil_random']);
     Route::get('/profil/{id}', [ActiviteController::class, 'profil']);
+
+    Route::prefix('/note')->group(function () {
+        Route::post('/create', [ActiviteNoteController::class, 'create']);
+        Route::post('/select', [ActiviteNoteController::class, 'select']);
+        Route::post('/remove', [ActiviteNoteController::class, 'delete']);
+    });
+
 });
 
 Route::prefix('/avis')->group(function () {
@@ -67,10 +74,10 @@ Route::prefix('/avis')->group(function () {
     Route::post('/select', [AvisController::class, 'select']);
 });
 
-Route::prefix('/avisnote')->group(function () {
-    Route::post('/create', [ActiviteNoteController::class, 'create']);
-    Route::post('/select', [ActiviteNoteController::class, 'select']);
-});
+// Route::prefix('/avisnote')->group(function () {
+//     Route::post('/create', [ActiviteNoteController::class, 'create']);
+//     Route::post('/select', [ActiviteNoteController::class, 'select']);
+// });
 
 Route::post('/upload-image', [ImageUploadController::class, 'upload']);
 Route::prefix('/galery')->group(function () {

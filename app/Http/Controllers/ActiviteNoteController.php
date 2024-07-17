@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ActiviteNote;
 use App\Models\AvisNote;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 
 class ActiviteNoteController extends Controller
 {
@@ -28,15 +29,22 @@ class ActiviteNoteController extends Controller
         try {
             $activnote = new ActiviteNote ();
 
-            $activnote -> IdUser = $request -> CleUser ;
+            $authorization = $request -> authorization;
+            $decrypt = Crypt::decrypt($authorization);
+            $idUser = explode('<>', $decrypt)[0];
+
+            $activnote -> IdUser = $idUser;
             $activnote -> IdActivite = $request -> CleActivite ;
-            $activnote -> NombreNote = $request -> NbNote ;
+            $activnote -> NombreNote = 1 ;
 
             $activnote -> save();
 
             $res = [
-              'msg' => 'avis created successfully',
+                'status' => true,
+                'msg' => 'avis created successfully',
             ];
+
+            return $res;
 
       } catch (\Throwable $th) {
           return response()->json(['error' => 'Error ', 'details' => $th->getMessage()], 500);
@@ -51,34 +59,47 @@ class ActiviteNoteController extends Controller
      */
     public function select(Request $request)
     {
-        $avis = AvisNote::where('id', '=', $request -> id)
-        ->first(['id', 'IdUser', 'IdActivite', '', 'NombreNote']);
+        //
+        try {
+            $authorization = $request -> authorization;
+            $decrypt = Crypt::decrypt($authorization);
+            $idUser = explode('<>', $decrypt)[0];
+    
+            $activity = ActiviteNote::where('IdUser', $idUser)
+                            -> where('IdActivite', $request -> CleActivite)
+                            -> first();
 
-if(!$avis) {
-return response()->json(['status' => false, 'msg' => 'Compte introuvable']);
-}
+            $nbr = ActiviteNote::where('IdActivite', $request -> CleActivite)->count();
 
+            if($activity) {
+                $res = [
+                    'status' => true,
+                    'msg' => "avis exist",
+                    'nbr' => $nbr
+                ];
+            } else {
+                $res = [
+                    'status' => false,
+                    'msg' => "avis not exist",
+                    'nbr' => $nbr
+                ];
+            }
+            
 
+            return $res;
 
-$res = [
-'status' => true,
-'CleUser' => $avis -> IdUser,
-'CleActivite' => $avis -> IdActivite,
-'NbNote' => $avis -> NombreNote,
-
-];
-
-return response()->json($res);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 'Error ', 'details' => $th->getMessage()], 500);
+        }
     }
 
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ActiviteNote  $activiteNote
      * @return \Illuminate\Http\Response
      */
-    public function show(ActiviteNote $activiteNote)
+    public function show(Request $request)
     {
         //
     }
@@ -109,11 +130,28 @@ return response()->json($res);
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ActiviteNote  $activiteNote
-     * @return \Illuminate\Http\Response
      */
-    public function destroy(ActiviteNote $activiteNote)
+    public function delete(Request $request)
     {
         //
+        try {
+            $authorization = $request -> authorization;
+            $decrypt = Crypt::decrypt($authorization);
+            $idUser = explode('<>', $decrypt)[0];
+    
+            ActiviteNote::where('IdUser', $idUser)
+                            -> where('IdActivite', $request -> CleActivite)
+                            -> delete();
+
+            $res = [
+                'status' => true,
+                'msg' => "avis removed successfully",
+            ];
+
+            return $res;
+
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 'Error ', 'details' => $th->getMessage()], 500);
+        }
     }
 }
