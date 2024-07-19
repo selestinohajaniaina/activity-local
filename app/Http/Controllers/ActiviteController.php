@@ -20,6 +20,15 @@ class ActiviteController extends Controller
         return Activite::where('id', $id) -> first();
     }
 
+    public function fetch($authorization)
+    {
+        //
+        $tokenDecoded = Crypt::decrypt($authorization);
+        $tokenExploded = explode("<>", $tokenDecoded);
+        $id_prestatire = $tokenExploded[0];
+        return Activite::where('idPrestataire', $id_prestatire) -> get();
+    }
+
     public function profil_random()
     {
         //

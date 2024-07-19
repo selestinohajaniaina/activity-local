@@ -9,6 +9,8 @@ use App\Http\Controllers\AvisController;
 use App\Http\Controllers\ActiviteNoteController;
 use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\GalerieController;
+use App\Http\Controllers\MessageFirstController;
+use App\Http\Controllers\NotificationPrestataireController;
 use Illuminate\Support\Facades\Crypt;
 
 /*
@@ -44,6 +46,8 @@ Route::get('/token/{authorization}', function (Request $request, $authorization)
 Route::prefix('/user')->group(function () {
     Route::post('/create', [userController::class, 'create']);
     Route::post('/select', [userController::class, 'select']);
+    Route::get('/find/{id}', [userController::class, 'find']);
+    Route::get('/list', [userController::class, 'all']);
 });
 
 
@@ -51,6 +55,11 @@ Route::prefix('/prestataire')->group(function () {
     Route::post('/create', [PrestataireController::class, 'create']);
     Route::post('/select', [PrestataireController::class, 'select']);
     Route::get('/profil/{id}', [PrestataireController::class, 'find']);
+
+    Route::prefix('/notification')->group(function () {
+        Route::get('/count/{authorization}', [NotificationPrestataireController::class, 'count']);
+        Route::get('/select/{authorization}', [NotificationPrestataireController::class, 'select']);
+    });
 });
 
 Route::prefix('/activity')->group(function () {
@@ -60,6 +69,7 @@ Route::prefix('/activity')->group(function () {
     Route::get('/random-2', [ActiviteController::class, 'random']);
     Route::get('/profil/1/random', [ActiviteController::class, 'profil_random']);
     Route::get('/profil/{id}', [ActiviteController::class, 'profil']);
+    Route::get('/fetch/{authorization}', [ActiviteController::class, 'fetch']);
 
     Route::prefix('/note')->group(function () {
         Route::post('/create', [ActiviteNoteController::class, 'create']);
@@ -84,4 +94,9 @@ Route::prefix('/galery')->group(function () {
     Route::post('/', [GalerieController::class, 'create']);
     Route::get('/{id_activity}', [GalerieController::class, 'get_one']);
     Route::get('/photos/{id_activity}', [GalerieController::class, 'get_all']);
+});
+
+Route::prefix('/message')->group(function () {
+    Route::post('/send', [MessageFirstController::class, 'create']);
+    Route::get('/get', [MessageFirstController::class, 'select']);
 });

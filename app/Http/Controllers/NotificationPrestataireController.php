@@ -4,27 +4,45 @@ namespace App\Http\Controllers;
 
 use App\Models\NotificationPrestataire;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 
 class NotificationPrestataireController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function count($authorization)
     {
         //
+        $decrypt = Crypt::decrypt($authorization);
+        $idPrestataire = explode('<>', $decrypt)[0];
+
+        $nbr = NotificationPrestataire::where('idPrestataire', $idPrestataire)
+                                        ->count();
+
+        return response()->json([
+            'status' => true,
+            'nbr' => $nbr,
+            'msg' => 'total notification',
+        ]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function select($authorization)
     {
         //
+        $decrypt = Crypt::decrypt($authorization);
+        $idPrestataire = explode('<>', $decrypt)[0];
+
+        $notification = NotificationPrestataire::where('idPrestataire', $idPrestataire)
+                                        -> get();
+
+        return $notification;
     }
 
     /**

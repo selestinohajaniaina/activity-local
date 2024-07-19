@@ -15,9 +15,12 @@ return new class extends Migration
     {
         Schema::create('notification_prestataires', function (Blueprint $table) {
             $table->id();
-            $table->integer('IdReservation');
-            $table->integer('IdAvis');
+            $table->integer('IdUser');
+            $table->integer('IdElement');
+            $table->text('element')->nullable();
+            $table->integer('idPrestataire');
             $table->text('type')->nullable();
+            $table->text('view')->nullable();
             $table->timestamps();
         });
     }

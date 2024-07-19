@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ActiviteNote;
-use App\Models\AvisNote;
+use App\Models\NotificationPrestataire;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 
@@ -39,6 +39,16 @@ class ActiviteNoteController extends Controller
 
             $activnote -> save();
 
+            // create notification to prestataire
+            $notification = new NotificationPrestataire();
+            $notification -> IdUser = $idUser;
+            $notification -> IdElement = $request -> CleActivite;
+            $notification -> element = 'activity';
+            $notification -> idPrestataire = $request -> idPrestataire;
+            $notification -> type = 'like';
+            $notification -> view = false;
+            $notification -> save();
+
             $res = [
                 'status' => true,
                 'msg' => 'avis created successfully',
@@ -70,6 +80,7 @@ class ActiviteNoteController extends Controller
                             -> first();
 
             $nbr = ActiviteNote::where('IdActivite', $request -> CleActivite)->count();
+
 
             if($activity) {
                 $res = [
@@ -142,6 +153,16 @@ class ActiviteNoteController extends Controller
             ActiviteNote::where('IdUser', $idUser)
                             -> where('IdActivite', $request -> CleActivite)
                             -> delete();
+
+            // create notification to prestataire
+            $notification = new NotificationPrestataire();
+            $notification -> IdUser = $idUser;
+            $notification -> IdElement = $request -> CleActivite;
+            $notification -> element = 'activity';
+            $notification -> idPrestataire = $request -> idPrestataire;
+            $notification -> type = 'unlike';
+            $notification -> view = false;
+            $notification -> save();
 
             $res = [
                 'status' => true,

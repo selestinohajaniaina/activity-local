@@ -70,4 +70,11 @@ class userController extends Controller
         return response()->json($res);
     }
 
+    public static function all()
+    {
+        $user = User::all();
+
+        return $user;
+    }
+
 }
