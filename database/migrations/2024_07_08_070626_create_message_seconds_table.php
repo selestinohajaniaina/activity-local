@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('message_seconds', function (Blueprint $table) {
             $table->id();
             $table->integer('IdUser');
+            $table->string('role');
             $table->text('contenu');
             $table->integer('IdMessageFirst');
             $table->timestamps();

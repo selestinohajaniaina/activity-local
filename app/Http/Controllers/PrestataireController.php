@@ -53,7 +53,8 @@ class PrestataireController extends Controller
             'lastname' => $prestataire -> prenom,
             'email' => $prestataire -> email,
             'pdp' => $prestataire -> pdp,
-            'role' => 'prestateur'
+            'role' => 'prestateur',
+            'id' => $id
         ]);
     }
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\MessageSecond;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 
 class MessageSecondController extends Controller
 {
@@ -12,30 +13,43 @@ class MessageSecondController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function create(Request $request)
     {
         //
+        $authorization = $request -> authorization;
+        $decrypt = Crypt::decrypt($authorization);
+        $idUser = explode('<>', $decrypt)[0];
+        if(explode('<>', $decrypt)[1]=='uid') {
+            $role = 'user';
+        }else {
+            $role = 'prestateur';
+        }
+
+        $message = new MessageSecond();
+        $message -> contenu = $request -> message;
+        $message -> idUser = $idUser;
+        $message -> role = $role;
+        $message -> IdMessageFirst = $request -> idMessage;
+        $message -> save();
+
+        return [
+            'status' => true,
+        ];
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Display created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function select($id)
     {
         //
+        $message_seconds = MessageSecond::where('IdMessageFirst', $id)
+                                            -> orderBy('id', 'asc')
+                                            -> get();
+        return $message_seconds;
     }
 
     /**

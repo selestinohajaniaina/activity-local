@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\MessageFirst;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 
 class MessageFirstController extends Controller
 {
@@ -12,9 +13,27 @@ class MessageFirstController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function select(Request $request)
     {
         //
+        $authorization = $request -> authorization;
+        $decrypt = Crypt::decrypt($authorization);
+        $idUser2 = explode('<>', $decrypt)[0];
+
+        $idUser1 = $request -> idUser1;
+
+        $MP = MessageFirst::where('idUser1', $idUser1)
+                            -> where('idUser2', $idUser2)
+                            -> first();
+        if($MP) {
+            return $MP;
+        } else {
+            $MP = new MessageFirst();
+            $MP -> idUser1 = $idUser1;
+            $MP -> idUser2 = $idUser2;
+            $MP -> save();
+            return $MP;
+        }
     }
 
     /**

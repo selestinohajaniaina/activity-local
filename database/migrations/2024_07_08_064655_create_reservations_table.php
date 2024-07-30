@@ -18,7 +18,8 @@ return new class extends Migration
             $table->integer('IdUser');
             $table->integer('IdActivite');
             $table->string('confirmation');
-            $table->date('DateReservation');
+            $table->date('dateDebut');
+            $table->date('dateFin');
             $table->integer('effectif');
             $table->timestamps();
         });

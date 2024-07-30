@@ -16,8 +16,10 @@ return new class extends Migration
         Schema::create('notification_users', function (Blueprint $table) {
             $table->id();
             $table->integer('IdUser');
+            $table->integer('IdElement');
+            $table->text('element')->nullable();
             $table->text('type')->nullable();
-            $table->text('descripation');
+            $table->text('view')->nullable();
             $table->timestamps();
         });
     }

@@ -110,9 +110,10 @@ class ActiviteNoteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request)
+    public function count($id_activity)
     {
         //
+        return ActiviteNote::where('IdActivite', $id_activity)->count();
     }
 
     /**

@@ -10,7 +10,10 @@ use App\Http\Controllers\ActiviteNoteController;
 use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\GalerieController;
 use App\Http\Controllers\MessageFirstController;
+use App\Http\Controllers\MessageSecondController;
 use App\Http\Controllers\NotificationPrestataireController;
+use App\Http\Controllers\NotificationUserController;
+use App\Http\Controllers\ReservationController;
 use Illuminate\Support\Facades\Crypt;
 
 /*
@@ -48,6 +51,11 @@ Route::prefix('/user')->group(function () {
     Route::post('/select', [userController::class, 'select']);
     Route::get('/find/{id}', [userController::class, 'find']);
     Route::get('/list', [userController::class, 'all']);
+
+    Route::prefix('/notification')->group(function () {
+        Route::get('/count/{authorization}', [NotificationUserController::class, 'count']);
+        Route::get('/select/{authorization}', [NotificationUserController::class, 'select']);
+    });
 });
 
 
@@ -70,11 +78,14 @@ Route::prefix('/activity')->group(function () {
     Route::get('/profil/1/random', [ActiviteController::class, 'profil_random']);
     Route::get('/profil/{id}', [ActiviteController::class, 'profil']);
     Route::get('/fetch/{authorization}', [ActiviteController::class, 'fetch']);
+    Route::get('/reservation/{id}', [ReservationController::class, 'get_reservation']);
+
 
     Route::prefix('/note')->group(function () {
         Route::post('/create', [ActiviteNoteController::class, 'create']);
         Route::post('/select', [ActiviteNoteController::class, 'select']);
         Route::post('/remove', [ActiviteNoteController::class, 'delete']);
+        Route::get('/count/{id_activity}', [ActiviteNoteController::class, 'count']);
     });
 
 });
@@ -97,6 +108,14 @@ Route::prefix('/galery')->group(function () {
 });
 
 Route::prefix('/message')->group(function () {
-    Route::post('/send', [MessageFirstController::class, 'create']);
-    Route::get('/get', [MessageFirstController::class, 'select']);
+    Route::get('/get/{id}', [MessageSecondController::class, 'select']);
+    Route::post('/send', [MessageSecondController::class, 'create']);
+    Route::post('/get', [MessageFirstController::class, 'select']);
+});
+
+Route::prefix('/reservation')->group(function () {
+    Route::post('/new', [ReservationController::class, 'new']);
+    Route::post('/accept', [ReservationController::class, 'update']);
+    Route::post('/delete', [ReservationController::class, 'destroy']);
+    Route::get('/fetch/{authorization}', [ReservationController::class, 'select']);
 });

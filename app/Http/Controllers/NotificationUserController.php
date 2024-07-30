@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\NotificationUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 
 class NotificationUserController extends Controller
 {
@@ -12,19 +13,37 @@ class NotificationUserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function count($authorization)
     {
         //
+        $decrypt = Crypt::decrypt($authorization);
+        $idUser = explode('<>', $decrypt)[0];
+
+        $nbr = NotificationUser::where('idUser', $idUser)
+                                        ->count();
+
+        return response()->json([
+            'status' => true,
+            'nbr' => $nbr,
+            'msg' => 'total notification',
+        ]);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function select($authorization)
     {
         //
+        $decrypt = Crypt::decrypt($authorization);
+        $idUser = explode('<>', $decrypt)[0];
+
+        $notification = NotificationUser::where('idUser', $idUser)
+                                                    -> orderBy('id', 'desc')
+                                                    -> get();
+
+        return $notification;
     }
 
     /**

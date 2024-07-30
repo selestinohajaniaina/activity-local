@@ -40,7 +40,8 @@ class NotificationPrestataireController extends Controller
         $idPrestataire = explode('<>', $decrypt)[0];
 
         $notification = NotificationPrestataire::where('idPrestataire', $idPrestataire)
-                                        -> get();
+                                                    -> orderBy('id', 'desc')
+                                                    -> get();
 
         return $notification;
     }
