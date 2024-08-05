@@ -41,9 +41,16 @@ class MessageFirstController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function conversation($authorization)
     {
         //
+        $decrypt = Crypt::decrypt($authorization);
+        $idUser2 = explode('<>', $decrypt)[0];
+
+        $message_seconds = MessageFirst::where('idUser2', $idUser2)
+                                            -> orderBy('id', 'desc')
+                                            -> get();
+        return $message_seconds;
     }
 
     /**

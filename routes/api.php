@@ -78,6 +78,7 @@ Route::prefix('/activity')->group(function () {
     Route::get('/profil/1/random', [ActiviteController::class, 'profil_random']);
     Route::get('/profil/{id}', [ActiviteController::class, 'profil']);
     Route::get('/fetch/{authorization}', [ActiviteController::class, 'fetch']);
+    Route::get('/count/{authorization}', [ActiviteController::class, 'count']);
     Route::get('/reservation/{id}', [ReservationController::class, 'get_reservation']);
 
 
@@ -111,6 +112,7 @@ Route::prefix('/message')->group(function () {
     Route::get('/get/{id}', [MessageSecondController::class, 'select']);
     Route::post('/send', [MessageSecondController::class, 'create']);
     Route::post('/get', [MessageFirstController::class, 'select']);
+    Route::get('/conversation/{authorization}', [MessageFirstController::class, 'conversation']);
 });
 
 Route::prefix('/reservation')->group(function () {

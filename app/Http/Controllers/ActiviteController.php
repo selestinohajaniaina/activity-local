@@ -26,7 +26,18 @@ class ActiviteController extends Controller
         $tokenDecoded = Crypt::decrypt($authorization);
         $tokenExploded = explode("<>", $tokenDecoded);
         $id_prestatire = $tokenExploded[0];
-        return Activite::where('idPrestataire', $id_prestatire) -> get();
+        return Activite::where('idPrestataire', $id_prestatire)
+                            -> orderBy('id', 'desc')
+                            -> get();
+    }
+
+    public function count($authorization)
+    {
+        //
+        $tokenDecoded = Crypt::decrypt($authorization);
+        $tokenExploded = explode("<>", $tokenDecoded);
+        $id_prestatire = $tokenExploded[0];
+        return Activite::where('idPrestataire', $id_prestatire) -> count();
     }
 
     public function profil_random()
